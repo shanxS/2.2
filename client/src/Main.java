@@ -1,16 +1,11 @@
 import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.debugger.ConsoleDebugger;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
+import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.rmi.server.ExportException;
+import java.io.*;
+import java.util.Properties;
 
 /**
  * Created by shanxS on 20/08/15.
@@ -19,26 +14,37 @@ import java.rmi.server.ExportException;
 
 public class Main
 {
+    // [TODO] shanxS
+    // why the fuck is it so difficlult to
+    // add properties fiel to idea
+    private final static String propFileName = "/Users/shanxS/workshop/play5_smack/2.2/client/res/config.properties";
+
     public static void main(String[] er)
     {
         try
         {
-            System.setProperty("smack.debugEnabled", "true");
+            Properties prop = new Properties();
+            InputStream input = new FileInputStream(propFileName);
+            prop.load(input);
 
-            AbstractXMPPConnection conn1 = new XMPPTCPConnection("admin", "admin", "death3");
-            ConsoleDebugger debugger = new ConsoleDebugger(conn1, new PrintWriter(System.out), new BufferedReader(new InputStreamReader(System.in)));
+            // samck debug
+            System.setProperty("smack.debugEnabled", "true");
             ConsoleDebugger.printInterpreted = true;
 
+            XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
+                    .setUsernameAndPassword(prop.getProperty("adminName"), prop.getProperty("adminPassword"))
+                    .setServiceName(prop.getProperty("serviceName"))
+                    .setPort(5222)
+                    .build();
+
+            AbstractXMPPConnection conn1 = new XMPPTCPConnection(config);
             conn1.connect();
 
             Presence presence = new Presence(Presence.Type.unavailable);
             presence.setStatus("Gone fishing");
-            // Send the packet (assume we have an XMPPConnection instance called "con").
             conn1.sendStanza(presence);
 
-
             System.out.print(conn1.getHost());
-
         }
         catch (Exception e)
         {
