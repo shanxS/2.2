@@ -13,5 +13,6 @@
     <orderEntry type="library" name="Gradle: org.jxmpp:jxmpp-core:0.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jxmpp:jxmpp-util-cache:0.4.2" level="project" />
     <orderEntry type="library" name="Gradle: org.igniterealtime.smack:smack-im:4.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.igniterealtime.smack:smack-java7:4.1.0" level="project" />
   </component>
 </module>

@@ -1,9 +1,11 @@
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.debugger.ConsoleDebugger;
+import org.jivesoftware.smack.java7.Java7SmackInitializer;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
+import javax.security.sasl.Sasl;
 import java.io.*;
 import java.util.Properties;
 
@@ -34,11 +36,12 @@ public class Main
             XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                     .setUsernameAndPassword(prop.getProperty("adminName"), prop.getProperty("adminPassword"))
                     .setServiceName(prop.getProperty("serviceName"))
-                    .setPort(5222)
+                    .setPort(Integer.parseInt(prop.getProperty("portNumber")))
                     .build();
 
             AbstractXMPPConnection conn1 = new XMPPTCPConnection(config);
             conn1.connect();
+            conn1.login("admin", "admin");
 
             Presence presence = new Presence(Presence.Type.unavailable);
             presence.setStatus("Gone fishing");
